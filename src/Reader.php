@@ -1,9 +1,17 @@
 <?php
 
+/**
+ * Class Reader
+ */
 class Reader
 {
+    /** @var Robot */
     protected $robot;
 
+    /**
+     * Reader constructor.
+     * @param string $file Path to file
+     */
     public function __construct($file)
     {
         $this->robot = new Robot();
@@ -13,8 +21,13 @@ class Reader
         }
     }
 
+    /**
+     * @param string $line
+     */
     public function parse($line) {
+        // test if command is valid
         preg_match('/^(PLACE ([\-]{0,1}\d*),([\-]{0,1}\d*),(NORTH|EAST|SOUTH|WEST))$|^MOVE$|^LEFT$|^RIGHT$|^REPORT$/i', $line, $match);
+        // if command is valid, call robot action
         if ($match[0]) {
             $tmpMatch = explode(" ", strtoupper($match[0]));
             $command = $tmpMatch[0];
