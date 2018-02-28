@@ -8,6 +8,7 @@ class Robot
     protected $y;
     protected $f;
     protected $isPlaced;
+    protected $cardinalDirections = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
 
     public function __construct()
     {
@@ -63,6 +64,13 @@ class Robot
     public function left()
     {
         if ($this->isPlaced) {
+            $key = array_search($this->f, $this->cardinalDirections);
+            if ($key === 0) {
+                $key = 3;
+            } else {
+                $key--;
+            }
+            $this->f = $this->cardinalDirections[$key];
             $this->report();
         } else {
             $this->reportError();
@@ -72,6 +80,13 @@ class Robot
     public function right()
     {
         if ($this->isPlaced) {
+            $key = array_search($this->f, $this->cardinalDirections);
+            if ($key === 3) {
+                $key = 0;
+            } else {
+                $key++;
+            }
+            $this->f = $this->cardinalDirections[$key];
             $this->report();
         } else {
             $this->reportError();
