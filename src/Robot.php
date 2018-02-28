@@ -1,20 +1,39 @@
 <?php
 
+/**
+ * Class Robot
+ */
 class Robot
 {
+    /** @var int */
     protected $tableSize = 5;
-
-    protected $x;
-    protected $y;
-    protected $f;
-    protected $isPlaced;
+    /** @var array */
     protected $cardinalDirections = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
 
+    /** @var  int */
+    protected $x;
+    /** @var  int */
+    protected $y;
+    /** @var  string */
+    protected $f;
+    /** @var bool */
+    protected $isPlaced;
+
+    /**
+     * Robot constructor.
+     */
     public function __construct()
     {
         $this->isPlaced = false;
     }
 
+    /**
+     * PLACE will put the toy robot on the table in position X,Y and facing NORTH, SOUTH, EAST or WEST.
+     * @param int $x
+     * @param int $y
+     * @param string $f 'NORTH', 'EAST', 'SOUTH' or 'WEST'
+     * @return void
+     */
     public function place($x, $y, $f)
     {
         if ($this->isValidPosition($x, $y)) {
@@ -22,12 +41,16 @@ class Robot
             $this->y = $y;
             $this->f = $f;
             $this->isPlaced = true;
-            $this->report();
         } else {
-            $this->reportError();
+            $this->isPlaced = false;
+            $this->error();
         }
     }
 
+    /**
+     * MOVE will move the toy robot one unit forward in the direction it is currently facing
+     * @return void
+     */
     public function move()
     {
         if ($this->isPlaced) {
@@ -54,13 +77,15 @@ class Robot
                 unset($tmpX);
                 unset($tmpY);
             }
-
-            $this->report();
         } else {
-            $this->reportError();
+            $this->error();
         }
     }
 
+    /**
+     * LEFT will rotate the robot 90 degrees in the specified direction without changing the position of the robot
+     * @return void
+     */
     public function left()
     {
         if ($this->isPlaced) {
@@ -71,12 +96,15 @@ class Robot
                 $key--;
             }
             $this->f = $this->cardinalDirections[$key];
-            $this->report();
         } else {
-            $this->reportError();
+            $this->error();
         }
     }
 
+    /**
+     * RIGHT will rotate the robot 90 degrees in the specified direction without changing the position of the robot
+     * @return void
+     */
     public function right()
     {
         if ($this->isPlaced) {
@@ -87,24 +115,41 @@ class Robot
                 $key++;
             }
             $this->f = $this->cardinalDirections[$key];
-            $this->report();
         } else {
-            $this->reportError();
+            $this->error();
         }
     }
 
+    /**
+     * REPORT will announce the X,Y and F of the robot
+     * @return void
+     */
     public function report()
     {
-        var_dump('Output: ' . $this->x . ',' . $this->y . ',' . $this->f . PHP_EOL);
-    }
-
-    public function reportError()
-    {
-        if (!$this->isPlaced) {
-            echo "Error: Robot is not placed on the table";
+        if ($this->isPlaced) {
+            echo 'Output: ' . $this->x . ',' . $this->y . ',' . $this->f . PHP_EOL;
         }
     }
 
+    /**
+     * Printing error
+     * @return void
+     */
+    public function error()
+    {
+        // The application should discard all commands in the sequence until a valid PLACE command has been executed.
+        // The task doesn't specify what to do here. Thus, just ignore this.
+        if (!$this->isPlaced) {
+            //echo 'Error: Robot is not placed on the table' . PHP_EOL;
+        }
+    }
+
+    /**
+     * Check if Position is on the table
+     * @param int $x
+     * @param int $y
+     * @return bool
+     */
     public function isValidPosition($x, $y)
     {
         $bValid = true;
