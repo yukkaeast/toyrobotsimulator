@@ -2,8 +2,11 @@
 
 class Reader
 {
+    protected $robot;
+
     public function __construct($file)
     {
+        $this->robot = new Robot();
         $oFile = new SplFileObject($file);
         while (!$oFile->eof()) {
             $this->parse(trim($oFile->fgets()));
@@ -21,6 +24,10 @@ class Reader
                 $y = $tmpMatchPlace[1];
                 $f = $tmpMatchPlace[2];
                 unset($tmpMatchPlace);
+
+                call_user_func([$this->robot, $command], $x, $y, $f);
+            } else {
+                call_user_func([$this->robot, $command]);
             }
             unset($tmpMatch);
         }
