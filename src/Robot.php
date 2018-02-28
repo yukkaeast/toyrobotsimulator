@@ -36,7 +36,7 @@ class Robot
      */
     public function place($x, $y, $f)
     {
-        if ($this->isValidPosition($x, $y)) {
+        if ($this->isValidPosition($x, $y, $f)) {
             $this->x = $x;
             $this->y = $y;
             $this->f = $f;
@@ -71,7 +71,7 @@ class Robot
                     break;
             }
 
-            if ($this->isValidPosition($tmpX, $tmpY)) {
+            if ($this->isValidPosition($tmpX, $tmpY, $this->f)) {
                 $this->x = $tmpX;
                 $this->y = $tmpY;
                 unset($tmpX);
@@ -127,8 +127,9 @@ class Robot
     public function report()
     {
         if ($this->isPlaced) {
-            echo 'Output: ' . $this->x . ',' . $this->y . ',' . $this->f . PHP_EOL;
+            return 'Output: ' . $this->x . ',' . $this->y . ',' . $this->f;
         }
+        return false;
     }
 
     /**
@@ -140,7 +141,7 @@ class Robot
         // The application should discard all commands in the sequence until a valid PLACE command has been executed.
         // The task doesn't specify what to do here. Thus, just ignore this.
         if (!$this->isPlaced) {
-            //echo 'Error: Robot is not placed on the table' . PHP_EOL;
+            //return 'Error: Robot is not placed on the table';
         }
     }
 
@@ -150,13 +151,16 @@ class Robot
      * @param int $y
      * @return bool
      */
-    public function isValidPosition($x, $y)
+    public function isValidPosition($x, $y, $f)
     {
         $bValid = true;
         if ($x < 0 || $x > $this->tableSize - 1) {
             $bValid = false;
         }
         if ($y < 0 || $y > $this->tableSize - 1) {
+            $bValid = false;
+        }
+        if (!in_array($f, $this->cardinalDirections)) {
             $bValid = false;
         }
         return $bValid;
