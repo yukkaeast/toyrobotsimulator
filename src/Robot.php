@@ -30,6 +30,30 @@ class Robot
     public function move()
     {
         if ($this->isPlaced) {
+            $tmpX = $this->x;
+            $tmpY = $this->y;
+            switch ($this->f) {
+                case 'NORTH':
+                    $tmpY++;
+                    break;
+                case 'EAST':
+                    $tmpX++;
+                    break;
+                case 'SOUTH':
+                    $tmpY--;
+                    break;
+                case 'WEST':
+                    $tmpX--;
+                    break;
+            }
+
+            if ($this->isValidPosition($tmpX, $tmpY)) {
+                $this->x = $tmpX;
+                $this->y = $tmpY;
+                unset($tmpX);
+                unset($tmpY);
+            }
+
             $this->report();
         } else {
             $this->reportError();
