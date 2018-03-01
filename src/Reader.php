@@ -8,7 +8,7 @@ class Reader
     /** @var Robot */
     protected $robot;
 
-    /** @var string*/
+    /** @var string */
     protected $report;
 
     /**
@@ -34,7 +34,7 @@ class Reader
         // test if command is valid
         preg_match('/^(PLACE ([\-]{0,1}\d*),([\-]{0,1}\d*),(NORTH|EAST|SOUTH|WEST))$|^MOVE$|^LEFT$|^RIGHT$|^REPORT$/i', $line, $match);
         // if command is valid, call robot action
-        if ($match[0]) {
+        if (isset($match[0])) {
             $tmpMatch = explode(" ", strtoupper($match[0]));
             $command = $tmpMatch[0];
             if ($command == 'PLACE') {
@@ -46,7 +46,10 @@ class Reader
 
                 call_user_func([$this->robot, $command], $x, $y, $f);
             } elseif ($command == 'REPORT') {
-                $report = call_user_func([$this->robot, $command]) . PHP_EOL;
+                $report = call_user_func([$this->robot, $command]);
+                if ($report) {
+                    $report .= PHP_EOL;
+                }
             } else {
                 call_user_func([$this->robot, $command]);
             }
@@ -63,5 +66,4 @@ class Reader
     {
         return $this->report;
     }
-
 }
