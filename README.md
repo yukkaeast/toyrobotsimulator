@@ -16,5 +16,5 @@ php run.php pathToFile
 # Testing
 
 ```
-./vendor/bin/phpunit --bootstrap .\src\Robot.php tests\RobotTest.php
+./vendor/bin/phpunit tests
 ```
